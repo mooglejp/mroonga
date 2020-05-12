@@ -15,7 +15,12 @@ if [ ! -e /var/lib/mysql/ibdata1 ] ; then
     --datadir=/var/lib/mysql \
     --user=mysql
   chown -R mysql: /var/lib/mysql
-  /usr/sbin/mysqld --user=mysql --daemonize
+  mysqld \
+    --basedir=/usr \
+    --datadir=/var/lib/mysql \
+    --user=mysql \
+    --daemonize \
+    --log-error
   mysql -e "CREATE USER root@'%'; GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION"
   mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql mysql
   mysql < /usr/share/mroonga/install.sql
@@ -26,6 +31,10 @@ if [ ! -e /var/lib/mysql/ibdata1 ] ; then
 fi
 
 chown -R mysql: /var/lib/mysql
-/usr/sbin/mysqld --user=mysql "$@"
+mysqld \
+  --basedir=/usr \
+  --datadir=/var/lib/mysql \
+  --user=mysql \
+  "$@"
 
 chown -R $original_owner:$original_group /var/lib/mysql

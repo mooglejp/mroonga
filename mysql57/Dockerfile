@@ -31,7 +31,12 @@ RUN mysqld \
       --basedir=/usr \
       --datadir=/var/lib/mysql \
       --user=mysql && \
-    /usr/sbin/mysqld --user=mysql --daemonize && \
+    mysqld \
+      --basedir=/usr \
+      --datadir=/var/lib/mysql \
+      --user=mysql \
+      --daemonize \
+      --log-error && \
     mysql -e "CREATE USER root@'%'; GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION" && \
     mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql mysql && \
     mysql < /usr/share/mroonga/install.sql && \
